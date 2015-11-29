@@ -25,9 +25,9 @@ class UserRepository extends Repository{
         ];
 
         try {$result = $this->db->insert('users', $data);} catch(\Exception $e) {
-            return trigger_error($e->getMessage(), E_USER_ERROR);
+            return $e->getCode();
         }
-        return json_encode($data['uuid']);
+        return $data['uuid'];
     }
 
     function getbyUuid($uuid) {

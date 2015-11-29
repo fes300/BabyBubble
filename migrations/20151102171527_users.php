@@ -24,6 +24,7 @@ class Users extends AbstractMigration
             ->addColumn('active', 'boolean')
             ->addColumn('created', 'timestamp')
             ->addColumn('updated', 'timestamp')
+            ->addIndex(array('username'), array('unique' => true))
             ->create();
     }
 

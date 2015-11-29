@@ -11,7 +11,7 @@ use Babybubble\Repository\UserModel as UserModel;
 use Babybubble\Repository\UserRepository as UserRepo;
 
 //controllers
-use Babybubble\Controller\Admin;
+use Babybubble\Controller\UserController;
 
 //Symfony components
 use Symfony\Component\Security\Core\User\User;
@@ -126,7 +126,7 @@ $app->get('/', function ()  use ($app) {
 });
 
 // build Admin controller
-$admin = new Admin($app);
-$app->mount('/admin', $admin->build());
+$admin = new UserController($app);
+$app->mount('/users', $admin->build());
 
 return $app;

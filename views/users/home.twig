@@ -1,0 +1,115 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<style>
+input.error {
+    border: 1px solid #e80c4d;
+    background-color: #f68bab;
+}
+input.success {
+    border: 1px solid #66cc66;
+    background-color: #b5f9af;
+}
+</style>
+
+<div id="addANewUser" class="container">
+    <h3>New user Form</h3>
+    <form role="form" method="post" action="">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="last_name" placeholder="Last name" required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-king"></span></span>
+            <select id="role" class="form-control" name="role" required>
+                <option value="ROLE_USER">Simple user</option>
+                <option value="ROLE_ADMIN">Admin user</option>
+            </select>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="username" placeholder="Username">
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <input id="pass3" class="form-control" name='password' type='password' placeholder='Password' >
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+            <input id="pass4" class="form-control" name='password2' type='password' onkeyup="checkPass2(); return false;" placeholder="Confirm password">
+        </div>
+        <span id="confirmMessage1" class="confirmMessage"></span>
+        </br>
+    </form>
+    <div id="newUserInfo"></div>
+    <button id="send1" class="btn btn-default">Submit</button>
+</div>
+
+<div id="manageUsers" class="container section">
+    <h3>Manage Users</h3>
+</div>
+
+<script>
+    function checkPass2()
+    {
+        if($('#pass3').val() == $('#pass4').val()){
+            $('#confirmMessage1').html("Passwords match!");
+            $('#confirmMessage1').removeClass('error');
+            $('#pass4').removeClass('error');
+            $('#confirmMessage1').addClass('success');
+            $('#pass4').addClass('success');
+            $('#send1').removeClass('disabled');
+        }else{
+            $('#confirmMessage1').html("Passwords do not match");
+            $('#confirmMessage1').removeClass('success');
+            $('#pass4').removeClass('success');
+            $('#confirmMessage1').addClass('error');
+            $('#pass4').addClass('error');
+            $('#send1').addClass('disabled');
+        }
+    };
+
+    $('#send1').click(function() {
+        var userData = {};
+        $.each($('#addANewUser input'),function(){
+            var fieldName = $(this).attr('name');
+            var fieldValue = $(this).val();
+            userData[fieldName] = fieldValue;
+        });
+        userData['role'] = $('#role').val();
+
+       $.ajax({
+          type: "POST",
+          url: '/users/user',
+          data: userData,
+          error: function() {
+             $('#newUserInfo').html('<p>An error has occurred</p>');
+          },
+          success: function(data) {
+              var text = '';
+              var response = data;
+              if(response == 0){
+                  text = 'Sorry but the username is already taken.';
+                  var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
+              }else{
+                  text = 'Congratulations, you added a user with Uuid '+data+'.';
+                  var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
+              }
+              $('.lastInfo').remove();
+              $('#newUserInfo').append(description);
+          }
+       });
+    });
+</script>
+
+{% endblock %}
