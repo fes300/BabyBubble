@@ -1,0 +1,10 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    Active: <input class='switch' type='checkbox' name='{{ user.uuid }}' {% if user.active %}checked{% endif %}>
+
+<script>
+
+</script>
+
+{% endblock %}

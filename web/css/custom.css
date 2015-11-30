@@ -47,6 +47,28 @@ footer{
     width: 100%;
 }
 
+#newAppointment{
+    display: none;
+    position: fixed;
+    width: 50%;
+    top: 30%;
+    left: 25%;
+    text-align:center;
+    z-index:10000;
+}
+
+#overlay {
+  background:rgba(0,0,0,0.7);
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
+  text-align:center;
+  z-index:1000;
+}
+
 .navbar-brand-logo{
     margin: 30px 0 60px 0;
 }

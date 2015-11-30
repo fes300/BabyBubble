@@ -27,6 +27,12 @@ class UserController {
             return $app->render('users/home.twig', ['user'=>$user, 'users'=>$users, 'page'=>'users']);
         })->secure('ROLE_ADMIN');
 
+        $admin->get('/manage/{userUuid}', function($userUuid) use($app){
+            $userRepo = new UserRepo($app['db']);
+            $user = $userRepo->getbyUuid($userUuid);
+            return $app->render('users/manageUser.twig', ['user'=>$user, 'page'=>'users']);
+        })->secure('ROLE_ADMIN');
+
         $admin->post('/user', function() use($app){
             $userRepo = new UserRepo($app['db']);
             $_POST['active'] = true;

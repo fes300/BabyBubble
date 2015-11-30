@@ -12,6 +12,7 @@ use Babybubble\Repository\UserRepository as UserRepo;
 
 //controllers
 use Babybubble\Controller\UserController;
+use Babybubble\Controller\AppointmentController;
 
 //Symfony components
 use Symfony\Component\Security\Core\User\User;
@@ -125,8 +126,12 @@ $app->get('/', function ()  use ($app) {
     return $app->render('home.twig', ['user'=>$user, 'page'=>'home']);
 });
 
-// build Admin controller
+// build User controller
 $admin = new UserController($app);
 $app->mount('/users', $admin->build());
+
+// build appointments controller
+$admin = new AppointmentController($app);
+$app->mount('/appointments', $admin->build());
 
 return $app;

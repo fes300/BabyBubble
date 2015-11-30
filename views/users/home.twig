@@ -57,6 +57,15 @@ input.success {
 
 <div id="manageUsers" class="container section">
     <h3>Manage Users</h3>
+    <div class="margin-bottom">
+        <table id="users" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr><th>Name</th><th>Last Name</th><th>Username</th><th>Role</th><th>Created</th><th>Updated</th><th></th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -109,6 +118,26 @@ input.success {
               $('#newUserInfo').append(description);
           }
        });
+    });
+</script>
+
+<script>
+    $("#users").dataTable({
+        "aaData":[
+            {% for user in users %}
+                {% if loop.index > 1 %},{% endif %}
+                    ["{{ user.first_name }}",
+                    "{{ user.last_name }}",
+                    "{{ user.username }}",
+                    "{{ user.role }}",
+                    "{{ user.created|date('m/d/Y') }}",
+                    "{{ user.updated|date('m/d/Y') }}",
+                    "<a href=/users/manage/{{ user.uuid }}><div class='btn btn-success'>Modify Info</div></a>"]
+            {% endfor %}
+        ],
+        "autoWidth": true,
+        "bPaginate": false,
+        "iDisplayLength": 25
     });
 </script>
 
