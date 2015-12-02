@@ -5,9 +5,12 @@
 <div id='calendar'></div>
 <div id='newAppointment'>
     <form id='newAppointmentForm' class="form-inline" role="form">
-        <input class="form-control" name="client" placeholder="Nome Bambino">
+        <input id="client" class="form-control" name="client" placeholder="Nome Bambino">
+        <input id="product" class="form-control" name="product" placeholder="Trattamento">
+        <input id="event" class="form-control" name="event" placeholder="Nome evento" style="display: none;">
+    </br></br>
         <input name="date" type="text" class="form-control starting_date" placeholder="Data appuntamento">
-        <input class="form-control" name="product" placeholder="Trattamento">
+        <input name="time" type="text" class="form-control timepicker" placeholder="Orario appuntamento">
     </br>
     <li role="separator" class="divider"></li>
         <input class="btn btn-success" type="submit" value="Crea appuntamento">
@@ -82,6 +85,16 @@ $(document).ready(function()
             $('#newAppointment').show('slow');
             $overlay.height($(document).height());
             $('#overlay').show('fast');
+            var minutes = '';
+            if(start.getMinutes()==0){
+                minutes = '00';
+            }else{ minutes = start.getMinutes(); };
+            if(start.getHours()==0){
+                $('#client').hide();
+                $('#product').hide();
+                $('#event').show();
+                $('.timepicker').val('All day event');
+            }else{$('.timepicker').val(start.getHours()+':'+minutes);}
             /*
                 if title is enterd calendar will add title and event into fullCalendar.
             */
@@ -182,6 +195,8 @@ $('.starting_date').click(function(){
         format: 'yyyy-mm-dd'
     });
 });
+
+$('.timepicker').pickatime({ format: 'H:i', interval: 5, min: [7,30], max: [18,0] });
 
 </script>
 <style type="text/css">

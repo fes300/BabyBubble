@@ -50,9 +50,9 @@ footer{
 #newAppointment{
     display: none;
     position: fixed;
-    width: 50%;
+    width: 30%;
     top: 30%;
-    left: 25%;
+    left: 30%;
     text-align:center;
     z-index:10000;
 }

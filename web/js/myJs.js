@@ -5,5 +5,8 @@ $(document).ready(function() {
     $('#overlay').click(function(){
         $(this).hide();
         $('#newAppointment').hide();
+        $('#client').show();
+        $('#product').show();
+        $('#event').hide();
     });
 });
