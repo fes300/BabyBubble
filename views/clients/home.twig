@@ -16,39 +16,39 @@
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-heart-empty"></span></span>
             <input type="text" class="form-control" name="tutors" placeholder="Tutors">
         </div>
         <span class="help-block">Inserire tutti i referenti separati da virgole.</span>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
             <input class="form-control" name='address' placeholder='indirizzo' >
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-earphone"></span></span>
             <input class="form-control" name='phone' placeholder="Telefono">
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
             <input class="form-control" name='email' type="email" placeholder='email' required>
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span> Data di nascita</span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
             <input class="form-control starting_date" name='birthday' required>
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
-            <textarea id='medical_conditions' class="form-control pickadate" name='medical_conditions' placeholder='Condizioni mediche specifiche' required></textarea>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-scale"></span></span>
+            <textarea rows="8" cols="25" id='medical_conditions' class="form-control pickadate" name='medical_conditions' placeholder='Condizioni mediche specifiche' required></textarea>
         </div>
         </br>
         <div class="input-group">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
-            <textarea id='first_contact_info' class="form-control pickadate" name='first_contact_info' placeholder='Come siete venuti a conoscenza di Babybubble?' required></textarea>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-info-sign"></span></span>
+            <textarea rows="8" cols="25" id='first_contact_info' class="form-control pickadate" name='first_contact_info' placeholder='Come siete venuti a conoscenza di Babybubble?' required></textarea>
         </div>
         </br>
 
@@ -73,13 +73,16 @@
 </div>
 
 <script>
-
-    $('.starting_date').data('value', "{{ "now"|date("m/d/Y") }}");
-    $('.starting_date').val("{{ "now"|date("m/d/Y") }}");
+    $('.starting_date').data('value', "1995-01-01");
+    $('.starting_date').val("Data di nascita");
     $('.starting_date').click(function(){
         $('.starting_date').pickadate({
-            clear: '',
-            today: '',
+            labelMonthNext: 'Go to the next month',
+            labelMonthPrev: 'Go to the previous month',
+            labelMonthSelect: 'Pick a month from the dropdown',
+            labelYearSelect: 'Pick a year from the dropdown',
+            selectMonths: true,
+            selectYears: true,
             format: 'yyyy-mm-dd'
         });
     });

@@ -52,6 +52,11 @@
     border: rgb(250, 208, 200);
 }
 
+.fc-border-separate,
+.fc-agenda-days{
+    background-color: #fff;
+}
+
 body{
     margin-top: 40px;
     text-align: center;
