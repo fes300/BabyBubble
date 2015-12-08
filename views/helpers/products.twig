@@ -1,0 +1,4 @@
+<option value="" selected>Seleziona il trattamento</option>
+{% for product in products %}
+    <option value="{{ product.uuid }}">{{ product.name }} {{ product.duration }}h</option>
+{% endfor %}

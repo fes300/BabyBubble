@@ -82,16 +82,16 @@ class UserRepository extends Repository{
     function update($post){
         $qb = $this->db->createQueryBuilder();
         $query = $qb->update('users')
-                ->set('first_name', $qb->expr()->literal($post->first_name))
-                ->set('last_name', $qb->expr()->literal($post->last_name))
-                ->set('username', $qb->expr()->literal($post->username))
-                ->set('password', $qb->expr()->literal($post->password))
+                ->set('first_name', $qb->expr()->literal($post['first_name']))
+                ->set('last_name', $qb->expr()->literal($post['last_name']))
+                ->set('username', $qb->expr()->literal($post['username']))
+                ->set('password', $qb->expr()->literal($post['password']))
                 ->where('uuid = :uuid')
-                ->setParameter('uuid', $post->uuid);
+                ->setParameter('uuid', $post['uuid']);
         try {$result = $query->execute();}catch(\Exception $e) {
-            return trigger_error($e->getMessage(), E_USER_ERROR);
+            return $e->getCode();
         }
-        return 'The user was updated successfully.';
+        return $post['uuid'];
     }
 
     function activate($post){

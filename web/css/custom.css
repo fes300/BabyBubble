@@ -26,10 +26,37 @@
     color: green;
 }
 
+.btn-default{
+    background-image:linear-gradient(to bottom,rgb(206, 200, 245) 0,rgb(206, 200, 245) 100%);
+    color: #fff;
+    text-shadow: 0 1px 0 rgb(212, 212, 214);
+    background-color: rgb(141, 170, 164);
+    border-radius: 1px;
+}
+
+.btn-danger{
+    background-image:linear-gradient(to bottom,rgb(237, 208, 200) 0,rgb(237, 208, 200) 100%);
+    color: #fff;
+    border: rgb(250, 208, 200);
+    text-shadow: 0 1px 0 rgb(212, 212, 214);
+    background-color: rgb(141, 170, 164);
+    border-radius: 1px;
+}
+
+.btn-success{
+    background-image:linear-gradient(to bottom,rgb(158, 237, 199) 0,rgb(158, 237, 199) 100%);
+    color: #fff;
+    text-shadow: 0 1px 0 rgb(212, 212, 214);
+    background-color: rgb(141, 170, 164);
+    border-radius: 1px ;
+    border: rgb(250, 208, 200);
+}
+
 body{
     margin-top: 40px;
     text-align: center;
     font-size: 14px;
+    background-color: rgb(217, 242, 246);
 }
 
 footer{
@@ -71,4 +98,11 @@ footer{
 
 .navbar-brand-logo{
     margin: 30px 0 60px 0;
+}
+
+.my-container{
+    background-color: rgb(209, 225, 240);
+    border: solid 2px rgb(236, 230, 231);
+    margin: 10px 0;
+    padding: 10px;
 }

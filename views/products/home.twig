@@ -1,0 +1,114 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<div id="addANewProduct" class="container">
+    <h3>Aggiungi un trattamento</h3>
+    <form role="form" method="post" action="">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-shopping-cart"></span></span>
+            <input type="text" class="form-control" name="name" placeholder="Nome del trattamento" required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+            <textarea rows="12" cols="25" id="description" type="text" class="form-control" name="description" placeholder="Descrizione del trattamento"></textarea>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+            <select id="duration" class="form-control" name="duration">
+                {% include "helpers/times.twig" %}
+            </select>
+        </div>
+        <span id="confirmMessage1" class="confirmMessage"></span>
+        </br>
+    </form>
+    <div id="newUserInfo"></div>
+    <button id="send1" class="btn btn-default">Submit</button>
+</div>
+
+{% for product in products %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col-sm-0 col-md-3 col-lg-3"></div>
+    <div class="my-container col-sm-12 col-md-6 col-lg-6" id="product{{ product.uuid }}">
+        <h3>{{ product.name }} {{ product.duration * 60 }} min.</h3>
+        <p>{{ product.description }}</p>
+        <button id="{{ product.uuid }}" class="btn btn-danger btn-cancel">Delete</button>
+    </div>
+    <div class="col-sm-0 col-md-3 col-lg-3"></div>
+</div>
+{% endfor %}
+
+<script>
+    $('#send1').click(function() {
+        var productData = {};
+        $.each($('#addANewProduct input'),function(){
+            var fieldName = $(this).attr('name');
+            var fieldValue = $(this).val();
+            productData[fieldName] = fieldValue;
+        });
+
+        productData['description'] = $('#description').val();
+        productData['duration'] = $('#duration').val();
+        console.log(productData);
+
+       $.ajax({
+          type: "POST",
+          url: '/products/product',
+          data: productData,
+          error: function(e) {
+              console.log(e);
+             $('#newUserInfo').html('<p>An error has occurred</p>');
+          },
+          success: function(data) {
+              var text = '';
+              var response = data;
+              console.log(response);
+              if(!response.uuid){
+                  text = 'Sorry but there was a problem when saving the product, please try again later.';
+                  var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
+              }else{
+                  text = 'Congratulations, you created a new product :)';
+                  var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
+              }
+              $('.lastInfo').remove();
+              $('#newUserInfo').append(description);
+          }
+       });
+    });
+
+    $('.btn-cancel').click(function() {
+        var areYouSure = confirm('Sei sicuro di voler cancellare questo trattamento?');
+
+        if(areYouSure){
+            data = {'uuid':($(this).attr('id'))};
+
+            $.ajax({
+               type: "POST",
+               url: '/products/delete',
+               data: data,
+               error: function(e) {
+                   console.log(e);
+                  $('#newUserInfo').html('<p>An error has occurred, please try again later</p>');
+               },
+               success: function(data) {
+                   var text = '';
+                   var response = data;
+                   console.log(response);
+                   if(!response.uuid){
+                       text = 'Purtroppo c\'è stato un problema nel cancellare il trattamento, si prega di riprovare più tardi.';
+                       var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
+                   }else{
+                       text = 'Il prodotto è stato correttamente cancellato';
+                       var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
+                       $('#product'+response.uuid).hide('slow');
+                   }
+                   $('.lastInfo').remove();
+                   $('#newUserInfo').append(description);
+               }
+            });
+        };
+    });
+</script>
+
+{% endblock %}

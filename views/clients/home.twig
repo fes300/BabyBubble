@@ -1,0 +1,141 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div id="addANewClient" class="container">
+    <h3>New user Form</h3>
+    <form role="form" method="post" action="">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="last_name" placeholder="Last name" required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="tutors" placeholder="Tutors">
+        </div>
+        <span class="help-block">Inserire tutti i referenti separati da virgole.</span>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <input class="form-control" name='address' placeholder='indirizzo' >
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+            <input class="form-control" name='phone' placeholder="Telefono">
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <input class="form-control" name='email' type="email" placeholder='email' required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span> Data di nascita</span>
+            <input class="form-control starting_date" name='birthday' required>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <textarea id='medical_conditions' class="form-control pickadate" name='medical_conditions' placeholder='Condizioni mediche specifiche' required></textarea>
+        </div>
+        </br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <textarea id='first_contact_info' class="form-control pickadate" name='first_contact_info' placeholder='Come siete venuti a conoscenza di Babybubble?' required></textarea>
+        </div>
+        </br>
+
+        <span id="confirmMessage1" class="confirmMessage"></span>
+        </br>
+    </form>
+    <div id="newUserInfo"></div>
+    <button id="send1" class="btn btn-default">Submit</button>
+</div>
+
+<div id="manageClients" class="container section">
+    <h3>Manage Users</h3>
+    <div class="margin-bottom">
+        <table id="clients" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr><th>Nome del bambino</th><th>Nome del tutor</th><th>Compleanno</th><th>Creato</th><th>Modificato</th><th></th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $('.starting_date').data('value', "{{ "now"|date("m/d/Y") }}");
+    $('.starting_date').val("{{ "now"|date("m/d/Y") }}");
+    $('.starting_date').click(function(){
+        $('.starting_date').pickadate({
+            clear: '',
+            today: '',
+            format: 'yyyy-mm-dd'
+        });
+    });
+
+    $('#send1').click(function() {
+        var clientData = {};
+        $.each($('#addANewClient input'),function(){
+            var fieldName = $(this).attr('name');
+            var fieldValue = $(this).val();
+            clientData[fieldName] = fieldValue;
+        });
+        clientData['first_contact_info'] = $('#first_contact_info').val();
+        clientData['medical_conditions'] = $('#medical_conditions').val();
+        console.log(clientData);
+
+       $.ajax({
+          type: "POST",
+          url: '/clients/client',
+          data: clientData,
+          error: function(e) {
+             console.log(e);
+             $('#newUserInfo').html('<p>An error has occurred</p>');
+          },
+          success: function(data) {
+              console.log(data);
+              var text = '';
+              var response = data;
+              if(!response.uuid){
+                  text = 'Purtroppo c\'è stato un problema nel salvare il cliente, si prega di riprovare più tardi.';
+                  var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
+              }else{
+                  text = 'Congratulazioni, il cliente è stato correttamente inserito :)';
+                  var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
+              }
+              $('.lastInfo').remove();
+              $('#newUserInfo').append(description);
+          }
+       });
+    });
+
+    $("#clients").dataTable({
+        "aaData":[
+            {% for client in clients %}
+                {% if loop.index > 1 %},{% endif %}
+                    ["{{ client.first_name }} {{ client.last_name }}",
+                    "{{ client.tutors[0] }}",
+                    "{{ client.birthday|date('m/d/Y') }}",
+                    "{{ client.created|date('m/d/Y') }}",
+                    "{{ client.updated|date('m/d/Y') }}",
+                    "<a href=/clients/manage/{{ client.uuid }}><div class='btn btn-success'>Modifica profilo</div></a>"]
+            {% endfor %}
+        ],
+        "autoWidth": true,
+        "bPaginate": false,
+        "iDisplayLength": 25
+    });
+</script>
+
+{% endblock %}

@@ -5,8 +5,12 @@
 <div id='calendar'></div>
 <div id='newAppointment'>
     <form id='newAppointmentForm' class="form-inline" role="form">
-        <input id="client" class="form-control" name="client" placeholder="Nome Bambino">
-        <input id="product" class="form-control" name="product" placeholder="Trattamento">
+        <select id="client" class="form-control" name="client">
+            {% include "helpers/clients.twig" %}
+        </select>
+        <select id="product" class="form-control" name="product">
+            {% include "helpers/products.twig" %}
+        </select>
         <input id="event" class="form-control" name="event" placeholder="Nome evento" style="display: none;">
     </br></br>
         <input name="date" type="text" class="form-control starting_date" placeholder="Data appuntamento">

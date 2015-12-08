@@ -9,7 +9,7 @@ use Babybubble\Repository\UserRepository as UserRepo;
 use Babybubble\Model\UserModel;
 
 
-class AppointmentController {
+class PromotionController {
 
     function __construct($app) {
         $this->app = $app;
@@ -21,7 +21,7 @@ class AppointmentController {
         $appointment = $app['controllers_factory'];
 
         $appointment->get('/', function() use($app){
-            return $app['twig']->render('appointments/home.twig', ['page'=>'appointments']);
+            return $app['twig']->render('promotions/home.twig', ['page'=>'promotions']);
         });
 
         $appointment->post('/appointment', function() use($app){

@@ -9,10 +9,15 @@ use Babybubble\Repository\UserModel as UserModel;
 
 //repositories
 use Babybubble\Repository\UserRepository as UserRepo;
+use Babybubble\Repository\ProductRepository as ProductRepo;
+use Babybubble\Repository\ClientRepository as ClientRepo;
 
 //controllers
 use Babybubble\Controller\UserController;
 use Babybubble\Controller\AppointmentController;
+use Babybubble\Controller\ProductController;
+use Babybubble\Controller\ClientController;
+use Babybubble\Controller\PromotionController;
 
 //Symfony components
 use Symfony\Component\Security\Core\User\User;
@@ -122,16 +127,32 @@ $app->get('/login', function( Request $request) use ($app) {
 });
 
 $app->get('/', function ()  use ($app) {
+    $productRepo = new ProductRepo($app['db']);
+    $clientRepo = new ClientRepo($app['db']);
+    $clients = $clientRepo->getAll();
+    $products = $productRepo->getAll();
     $user = $app['user']->getUsername();
-    return $app->render('home.twig', ['user'=>$user, 'page'=>'home']);
+    return $app->render('home.twig', ['user'=>$user, 'products'=>$products, 'clients'=>$clients, 'page'=>'home']);
 });
 
 // build User controller
 $admin = new UserController($app);
 $app->mount('/users', $admin->build());
 
+// build products controller
+$admin = new ProductController($app);
+$app->mount('/products', $admin->build());
+
+// build appointments controller
+$admin = new ClientController($app);
+$app->mount('/clients', $admin->build());
+
 // build appointments controller
 $admin = new AppointmentController($app);
 $app->mount('/appointments', $admin->build());
+
+// build appointments controller
+$admin = new PromotionController($app);
+$app->mount('/promotions', $admin->build());
 
 return $app;
