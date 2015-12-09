@@ -57,11 +57,42 @@
     background-color: #fff;
 }
 
+.sheet{
+    padding: 1em;
+    background-color: rgba(255,255,255,0.7);
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    box-shadow: 8px 8px 1px rgba(0,0,0,0.05);
+    max-width: 800px;
+}
+
+.navbar{
+    box-shadow: 8px 8px 1px rgba(0,0,0,0.05);
+}
+
+.my-navbar{
+    background-color: rgba(217, 242, 246, 0.35);
+}
+
 body{
     margin-top: 40px;
     text-align: center;
     font-size: 14px;
     background-color: rgb(217, 242, 246);
+    background-image: url('/img/logo.png');
+    background-repeat: no-repeat;
+    background-size:100%;
+}
+
+#body-cover{
+    z-index: -1;
+    padding-bottom: 100%;
+    position: fixed;
+    width: 100%;
+    background-color: rgb(217, 242, 246);
+    top:0;
+    left:0;
+    opacity: 0.8;
 }
 
 header{
@@ -105,13 +136,18 @@ footer{
   z-index:1000;
 }
 
-.navbar-brand-logo{
-    margin: 30px 0 60px 0;
-}
-
 .my-container{
     background-color: rgb(209, 225, 240);
     border: solid 2px rgb(236, 230, 231);
     margin: 10px 0;
     padding: 10px;
+}
+
+.space{
+    height: 40px;
+}
+
+.navbarLogo{
+    margin: 10px 0 4px 0;
+    padding: 0;
 }

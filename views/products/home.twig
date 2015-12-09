@@ -1,7 +1,7 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<div id="addANewProduct" class="container">
+<div id="addANewProduct" class="container sheet">
     <h3>Aggiungi un trattamento</h3>
     <form role="form" method="post" action="">
         <div class="input-group">
@@ -24,9 +24,9 @@
         </br>
     </form>
     <div id="newUserInfo"></div>
-    <button id="send1" class="btn btn-default">Submit</button>
+    <button id="send1" class="btn btn-success">Submit</button>
 </div>
-
+<div class="space"></div>
 {% for product in products %}
 <div class="col-sm-12 col-md-12 col-lg-12">
     <div class="col-sm-0 col-md-3 col-lg-3"></div>
