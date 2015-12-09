@@ -45,8 +45,9 @@ class ClientController {
         $client->post('/manage/{clientUuid}', function($clientUuid) use($app){
             $clientRepo = new ClientRepo($app['db']);
             $_POST['uuid'] = $clientUuid;
-            return $app->json(new Client($_POST));
-            return $app->json($userRepo->update($_POST));
+            $_POST['tutors'] = json_encode(explode(',', $_POST['tutors']));
+            $client = new Client($_POST);
+            return $app->json($clientRepo->update($client));
         })->secure('IS_AUTHENTICATED_REMEMBERED');
 
         return $client;

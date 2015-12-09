@@ -63,15 +63,20 @@ class ClientRepository extends Repository{
     function update($post){
         $qb = $this->db->createQueryBuilder();
         $query = $qb->update('clients')
-                ->set('first_name', $qb->expr()->literal($post['first_name']))
-                ->set('last_name', $qb->expr()->literal($post['last_name']))
-                ->set('username', $qb->expr()->literal($post['username']))
-                ->set('password', $qb->expr()->literal($post['password']))
+                ->set('first_name', $qb->expr()->literal($post->first_name))
+                ->set('last_name', $qb->expr()->literal($post->last_name))
+                ->set('tutors', $qb->expr()->literal(json_encode($post->tutors)))
+                ->set('address', $qb->expr()->literal($post->address))
+                ->set('phone', $post->phone)
+                ->set('email', $qb->expr()->literal($post->email))
+                ->set('birthday', $qb->expr()->literal($post->birthday))
+                ->set('medical_conditions', $qb->expr()->literal($post->medical_conditions))
+                ->set('first_contact_info', $qb->expr()->literal($post->first_contact_info))
                 ->where('uuid = :uuid')
-                ->setParameter('uuid', $post['uuid']);
+                ->setParameter('uuid', $post->uuid);
         try {$result = $query->execute();}catch(\Exception $e) {
             return $e->getCode();
         }
-        return $post['uuid'];
+        return ['uuid'=>$post->uuid];
     }
 }

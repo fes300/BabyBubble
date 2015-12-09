@@ -88,6 +88,7 @@
     });
 
     $('#send1').click(function() {
+        if($(this).hasClass('disabled')) return false;
         var clientData = {};
         $.each($('#addANewClient input'),function(){
             var fieldName = $(this).attr('name');
