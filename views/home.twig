@@ -3,7 +3,7 @@
 {% block content %}
 
 <div id='calendar'></div>
-<div id='newAppointment'>
+<div id='newAppointment' class="sheet">
     <form id='newAppointmentForm' class="form-inline" role="form">
         <select id="client" class="form-control" name="client">
             {% include "helpers/clients.twig" %}
@@ -90,9 +90,13 @@ $(document).ready(function()
             $overlay.height($(document).height());
             $('#overlay').show('fast');
             var minutes = '';
+            var dateClicked = start.getFullYear()+'-'+(start.getMonth()+1)+'-'+start.getDate();
+            $('.starting_date').val(dateClicked);
+
             if(start.getMinutes()==0){
                 minutes = '00';
             }else{ minutes = start.getMinutes(); };
+
             if(start.getHours()==0){
                 $('#client').hide();
                 $('#product').hide();
@@ -190,8 +194,6 @@ $("#newAppointmentForm").on('submit',(function(e) {
     });
 }));
 
-$('.starting_date').data('value', "{{ "now"|date("m/d/Y") }}");
-$('.starting_date').val("{{ "now"|date("m/d/Y") }}");
 $('.starting_date').click(function(){
     $('.starting_date').pickadate({
         clear: '',
