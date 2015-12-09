@@ -36,7 +36,7 @@ class ClientRepository extends Repository{
 
     function getbyUuid($uuid) {
         $rows = $this->db->fetchAll(
-            'SELECT * FROM users WHERE uuid = ?',
+            'SELECT * FROM clients WHERE uuid = ?',
             [$uuid]
         );
         return new Client($rows[0]);
@@ -54,7 +54,7 @@ class ClientRepository extends Repository{
 
     function getByLastName($lastName) {
         $rows = $this->db->fetchAll(
-            'SELECT * FROM users WHERE username = ?',
+            'SELECT * FROM clients WHERE username = ?',
             [$lastName]
         );
         return new Client($rows[0]);
@@ -62,7 +62,7 @@ class ClientRepository extends Repository{
 
     function update($post){
         $qb = $this->db->createQueryBuilder();
-        $query = $qb->update('users')
+        $query = $qb->update('clients')
                 ->set('first_name', $qb->expr()->literal($post['first_name']))
                 ->set('last_name', $qb->expr()->literal($post['last_name']))
                 ->set('username', $qb->expr()->literal($post['username']))

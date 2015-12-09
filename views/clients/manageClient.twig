@@ -1,54 +1,64 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
+<style>
+input.error {
+    border: 1px solid #e80c4d;
+    background-color: #f68bab;
+}
+input.success {
+    border: 1px solid #66cc66;
+    background-color: #b5f9af;
+}
+</style>
 
-<div id="addANewClient" class="container">
-    <h3>Inserisci un nuovo Bambino!</h3>
+<div id="addANewUser" class="container">
+    <h3>Modifica {{ client.first_name }} {{ client.last_name }}</h3>
     <form role="form" method="post" action="">
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-            <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+            <input type="text" class="form-control" name="first_name" value="{{ client.first_name }}" required>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-            <input type="text" class="form-control" name="last_name" placeholder="Last name" required>
+            <input type="text" class="form-control" name="last_name" value="{{ client.last_name }}" required>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-heart-empty"></span></span>
-            <input type="text" class="form-control" name="tutors" placeholder="Tutors">
+            <input type="text" class="form-control" name="tutors" value="{{ client.tutors }}">
         </div>
         <span class="help-block">Inserire tutti i referenti separati da virgole.</span>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
-            <input class="form-control" name='address' placeholder='indirizzo' >
+            <input class="form-control" name='address' value="{{ client.address }}" >
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-earphone"></span></span>
-            <input class="form-control" name='phone' placeholder="Telefono">
+            <input class="form-control" name='phone' value="{{ client.phone }}">
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-            <input class="form-control" name='email' type="email" placeholder='email' required>
+            <input class="form-control" name='email' type="email" value="{{ client.email }}" required>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
-            <input class="form-control starting_date" name='birthday' required>
+            <input class="form-control starting_date" name='birthday' value="{{ client.birthday }}" required>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-scale"></span></span>
-            <textarea rows="8" cols="25" id='medical_conditions' class="form-control pickadate" name='medical_conditions' placeholder='Condizioni mediche specifiche' required></textarea>
+            <textarea rows="8" cols="25" id='medical_conditions' class="form-control pickadate" name='medical_conditions' required>{{ client.medical_conditions }}</textarea>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-info-sign"></span></span>
-            <textarea rows="8" cols="25" id='first_contact_info' class="form-control pickadate" name='first_contact_info' placeholder='Come siete venuti a conoscenza di Babybubble?' required></textarea>
+            <textarea rows="8" cols="25" id='first_contact_info' class="form-control pickadate" name='first_contact_info' required>{{ client.first_contact_info }}</textarea>
         </div>
         </br>
 
@@ -59,22 +69,8 @@
     <button id="send1" class="btn btn-default">Submit</button>
 </div>
 
-<div id="manageClients" class="container section">
-    <h3>Manage Users</h3>
-    <div class="margin-bottom">
-        <table id="clients" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr><th>Nome del bambino</th><th>Nome del tutor</th><th>Compleanno</th><th>Creato</th><th>Modificato</th><th></th>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
-
 <script>
-    $('.starting_date').data('value', "2005-01-01");
-    $('.starting_date').val("Data di nascita");
+    $('.starting_date').val("{{ client.birthday|date('m/d/Y') }}");
     $('.starting_date').click(function(){
         $('.starting_date').pickadate({
             labelMonthNext: 'Go to the next month',
@@ -86,10 +82,9 @@
             format: 'yyyy-mm-dd'
         });
     });
-
     $('#send1').click(function() {
         var clientData = {};
-        $.each($('#addANewClient input'),function(){
+        $.each($('#addANewUser input'),function(){
             var fieldName = $(this).attr('name');
             var fieldValue = $(this).val();
             clientData[fieldName] = fieldValue;
@@ -99,44 +94,27 @@
 
        $.ajax({
           type: "POST",
-          url: '/clients/client',
+          url: '/clients/manage/'+'{{ client.uuid }}',
           data: clientData,
           error: function(e) {
-             console.log(e);
-             $('#newUserInfo').html('<p>An error has occurred</p>');
+              console.log(e);
+             $('#newUserInfo').html('<p>An error has occurred, please try again later.</p>');
           },
           success: function(data) {
               console.log(data);
               var text = '';
               var response = data;
-              if(!response.uuid){
-                  text = 'Purtroppo c\'è stato un problema nel salvare il cliente, si prega di riprovare più tardi.';
+              if(response == 0){
+                  text = 'I dati corrispondono a un altrobambino già presente nel database!.';
                   var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
               }else{
-                  text = 'Congratulazioni, il cliente è stato correttamente inserito :)';
+                  text = 'Congratulazioni, hai correttamente modificato le informazioni :)';
                   var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
               }
               $('.lastInfo').remove();
               $('#newUserInfo').append(description);
           }
        });
-    });
-
-    $("#clients").dataTable({
-        "aaData":[
-            {% for client in clients %}
-                {% if loop.index > 1 %},{% endif %}
-                    ["{{ client.first_name }} {{ client.last_name }}",
-                    "{{ client.tutors[0] }}",
-                    "{{ client.birthday|date('m/d/Y') }}",
-                    "{{ client.created|date('m/d/Y') }}",
-                    "{{ client.updated|date('m/d/Y') }}",
-                    "<a href=/clients/manage/{{ client.uuid }}><div class='btn btn-success'>Modifica profilo</div></a>"]
-            {% endfor %}
-        ],
-        "autoWidth": true,
-        "bPaginate": false,
-        "iDisplayLength": 25
     });
 </script>
 

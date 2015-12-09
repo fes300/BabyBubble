@@ -38,12 +38,14 @@ class ClientController {
         $client->get('/manage/{clientUuid}', function($clientUuid) use($app){
             $clientRepo = new ClientRepo($app['db']);
             $client = $clientRepo->getbyUuid($clientUuid);
-            return $app->render('clients/manageClient.twig', ['client'=>$client, 'page'=>'users']);
+            $client->tutors = implode(",",$client->tutors);
+            return $app->render('clients/manageClient.twig', ['client'=>$client, 'page'=>'clients']);
         })->secure('IS_AUTHENTICATED_REMEMBERED');
 
         $client->post('/manage/{clientUuid}', function($clientUuid) use($app){
             $clientRepo = new ClientRepo($app['db']);
             $_POST['uuid'] = $clientUuid;
+            return $app->json(new Client($_POST));
             return $app->json($userRepo->update($_POST));
         })->secure('IS_AUTHENTICATED_REMEMBERED');
 
