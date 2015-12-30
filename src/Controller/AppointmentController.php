@@ -24,7 +24,20 @@ class AppointmentController {
         $appointment = $app['controllers_factory'];
 
         $appointment->get('/', function() use($app){
-            return $app['twig']->render('appointments/home.twig', ['page'=>'appointments']);
+            $appointmentRepo = new AppointmentRepo($app['db']);
+            $appointments = $appointmentRepo->getAll();
+            return $app['twig']->render('appointments/home.twig', ['appointments'=>$appointments, 'page'=>'appointments']);
+        });
+
+        $appointment->get('/{appointmentUuid}', function($appointmentUuid) use($app){
+            $appointmentRepo = new AppointmentRepo($app['db']);
+            $clientRepo = new ClientRepo($app['db']);
+            $productRepo = new ProductRepo($app['db']);
+            $clients = $clientRepo->getAll();
+            $products = $productRepo->getAll();
+            $extendedAppointment = json_decode($appointmentRepo->getAppointmentWithClientInfo($appointmentUuid));
+            $extendedAppointment->tutors = implode(",",json_decode($extendedAppointment->tutors));
+            return $app['twig']->render('appointments/manageAppointment.twig', ['appointment'=>$extendedAppointment, 'clients'=>$clients, 'products'=>$products, 'page'=>'appointments']);
         });
 
         $appointment->post('/appointment', function() use($app){

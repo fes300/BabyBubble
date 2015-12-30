@@ -1,4 +1,4 @@
-<option value="" selected>Seleziona il trattamento</option>
+<option value="" {% if appointment is not defined %}selected{% endif %}>Seleziona il trattamento</option>
 {% for product in products %}
-    <option value="{{ product.uuid }}">{{ product.name }} {{ product.duration }}h</option>
+    <option value="{{ product.uuid }}" {% if appointment is defined and appointment.product_name == product.name %}selected{% endif %}>{{ product.name }} {{ product.duration }}h</option>
 {% endfor %}

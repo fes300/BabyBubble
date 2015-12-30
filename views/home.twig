@@ -33,7 +33,7 @@ var formattedEvents = events.map(function(event){
         start: startDate,
         end:endDate,
         allDay: false,
-        url: '/admin/appointments/'+event.uuid
+        url: '/appointments/'+event.uuid
     };
     return appForm;
 });
@@ -58,41 +58,17 @@ $(document).ready(function()
     {
         weekends: false,
         editable: false,
-        /*
-            header option will define our calendar header.
-            left define what will be at left position in calendar
-            center define what will be at center position in calendar
-            right define what will be at right position in calendar
-        */
         header:
         {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        /*
-            defaultView option used to define which view to show by default,
-            for example we have used agendaWeek.
-        */
         defaultView: 'agendaWeek',
-        /*
-            selectable:true will enable user to select datetime slot
-            selectHelper will add helpers for selectable.
-        */
         selectable: true,
         selectHelper: true,
-        /*
-            when user select timeslot this option code will execute.
-            It has three arguments. Start,end and allDay.
-            Start means starting time of event.
-            End means ending time of event.
-            allDay means if events is for entire day or not.
-        */
         select: function(start, end, allDay)
         {
-            /*
-                after selection user will be promted for enter title for event.
-            */
             $('#newAppointment').show('slow');
             $overlay.height($(document).height());
             $('#overlay').show('fast');

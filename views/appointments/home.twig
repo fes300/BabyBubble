@@ -2,6 +2,36 @@
 
 {% block content %}
 
-here there are appointments :)
+<div id="manageAppointments" class="container section">
+    <h3>Guarda tutti gli appuntamenti</h3>
+    <div class="margin-bottom">
+        <table id="appointments" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr><th>Nome del bambino</th><th>Prodotto acquistato</th><th>Data appuntamento</th><th>Creato</th><th>Modificato</th><th></th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+$("#appointments").dataTable({
+    "aaData":[
+        {% for appointment in appointments %}
+            {% if loop.index > 1 %},{% endif %}
+                ["{{ appointment.client_name }}",
+                "{{ appointment.product_name }}",
+                "{{ appointment.date|date('m/d/Y') }}",
+                "{{ appointment.created|date('m/d/Y') }}",
+                "{{ appointment.updated|date('m/d/Y') }}",
+                "<a href=/appointments/{{ appointment.uuid }}><div class='btn btn-success'>Guarda l'appuntamento</div></a>"]
+        {% endfor %}
+    ],
+    "autoWidth": true,
+    "bPaginate": false,
+    "iDisplayLength": 25
+});
+</script>
 
 {% endblock %}

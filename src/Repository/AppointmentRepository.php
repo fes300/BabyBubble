@@ -50,6 +50,11 @@ class AppointmentRepository extends Repository{
          return $appointments;
     }
 
+    function getAppointmentWithClientInfo($uuid){
+        $rows = $this->db->fetchAll('SELECT * FROM appointments JOIN clients ON appointments.client_uuid=clients.uuid WHERE appointments.uuid = ?', [$uuid]);
+        return json_encode($rows[0]);
+    }
+
     function getByClientUuid($clientUuid) {
         $rows = $this->db->fetchAll(
             'SELECT * FROM appointments WHERE client_uuid = ?',
