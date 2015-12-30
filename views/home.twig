@@ -22,19 +22,26 @@
 </div>
 
 <script type="text/javascript">
+var events = '{{ appointments|e('js') }}';
+    events = eval(events);
 
-    /*
-        jQuery document ready
-    */
+var formattedEvents = events.map(function(event){
+    var startDate = new Date(event.date);
+          endDate = new Date(startDate.getTime() + (parseFloat(event.product_duration)*60)*60000);
+    appForm = {
+        title: event.client_name+' '+event.product_name,
+        start: startDate,
+        end:endDate,
+        allDay: false,
+        url: '/admin/appointments/'+event.uuid
+    };
+    return appForm;
+});
+
+console.log(formattedEvents);
 
 $(document).ready(function()
 {
-    /*
-        date store today date.
-        d store today date.
-        m store current month.
-        y store current year.
-    */
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -103,75 +110,8 @@ $(document).ready(function()
                 $('#event').show();
                 $('.timepicker').val('All day event');
             }else{$('.timepicker').val(start.getHours()+':'+minutes);}
-            /*
-                if title is enterd calendar will add title and event into fullCalendar.
-            */
-            // {
-            //     calendar.fullCalendar('renderEvent',
-            //         {
-            //             title: title,
-            //             start: start,
-            //             end: end,
-            //             allDay: allDay
-            //         },
-            //         true // make the event "stick"
-            //     );
-            // }
-            // calendar.fullCalendar('unselect');
         },
-        /*
-            editable: true allow user to edit events.
-        */
-        /*
-            events is the main option for calendar.
-            for demo we have added predefined events in json object.
-        */
-        events: [
-            {
-                title: 'All Day Event',
-                start: new Date(y, m, 1)
-            },
-            {
-                title: 'Long Event',
-                start: new Date(y, m, d-5),
-                end: new Date(y, m, d-2)
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d-3, 16, 0),
-                allDay: false
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d+4, 16, 0),
-                allDay: false
-            },
-            {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false
-            },
-            {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false
-            },
-            {
-                title: 'Birthday Party',
-                start: new Date(y, m, d+1, 19, 0),
-                end: new Date(y, m, d+1, 22, 30),
-                allDay: false
-            },
-            {
-                title: 'Click for Google',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                url: 'http://google.com/'
-            }
-        ]
+        events: formattedEvents
     });
 });
 
@@ -188,8 +128,9 @@ $("#newAppointmentForm").on('submit',(function(e) {
         success: function(data)   // A function to be called if request succeeds
         {
             console.log(data);
-            // $("#message").text(data);
-            // $("#message").show('slow');
+            alert('congratulations, you scheduled a new appointment :)');
+            $('#newAppointment').hide('slow');
+            $('#overlay').hide('slow');
         }
     });
 }));

@@ -47,7 +47,7 @@ class AppointmentRepository extends Repository{
              $appointment = new Appointment($rows[$i]);
              array_push($appointments, $appointment);
          };
-         return $clients;
+         return $appointments;
     }
 
     function getByClientUuid($clientUuid) {

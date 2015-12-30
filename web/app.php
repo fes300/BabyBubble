@@ -11,6 +11,7 @@ use Babybubble\Repository\UserModel as UserModel;
 use Babybubble\Repository\UserRepository as UserRepo;
 use Babybubble\Repository\ProductRepository as ProductRepo;
 use Babybubble\Repository\ClientRepository as ClientRepo;
+use Babybubble\Repository\AppointmentRepository as AppointmentRepo;
 
 //controllers
 use Babybubble\Controller\UserController;
@@ -129,10 +130,12 @@ $app->get('/login', function( Request $request) use ($app) {
 $app->get('/', function ()  use ($app) {
     $productRepo = new ProductRepo($app['db']);
     $clientRepo = new ClientRepo($app['db']);
+    $appointmentRepo = new AppointmentRepo($app['db']);
     $clients = $clientRepo->getAll();
     $products = $productRepo->getAll();
+    $appointments = json_encode($appointmentRepo->getAll());
     $user = $app['user']->getUsername();
-    return $app->render('home.twig', ['user'=>$user, 'products'=>$products, 'clients'=>$clients, 'page'=>'home']);
+    return $app->render('home.twig', ['appointments'=>$appointments, 'user'=>$user, 'products'=>$products, 'clients'=>$clients, 'page'=>'home']);
 });
 
 // build User controller
