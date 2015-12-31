@@ -51,7 +51,7 @@ class AppointmentRepository extends Repository{
     }
 
     function getAppointmentWithClientInfo($uuid){
-        $rows = $this->db->fetchAll('SELECT * FROM appointments JOIN clients ON appointments.client_uuid=clients.uuid WHERE appointments.uuid = ?', [$uuid]);
+        $rows = $this->db->fetchAll('SELECT *, clients.uuid as "clientUuid", appointments.uuid as "appointmentUuid" FROM appointments JOIN clients ON appointments.client_uuid=clients.uuid WHERE appointments.uuid = ?', [$uuid]);
         return json_encode($rows[0]);
     }
 
@@ -65,21 +65,30 @@ class AppointmentRepository extends Repository{
 
     function update($post){
         $qb = $this->db->createQueryBuilder();
-        $query = $qb->update('clients')
-                ->set('first_name', $qb->expr()->literal($post->first_name))
-                ->set('last_name', $qb->expr()->literal($post->last_name))
-                ->set('tutors', $qb->expr()->literal(json_encode($post->tutors)))
-                ->set('address', $qb->expr()->literal($post->address))
-                ->set('phone', $post->phone)
-                ->set('email', $qb->expr()->literal($post->email))
-                ->set('birthday', $qb->expr()->literal($post->birthday))
-                ->set('medical_conditions', $qb->expr()->literal($post->medical_conditions))
-                ->set('first_contact_info', $qb->expr()->literal($post->first_contact_info))
+        $query = $qb->update('appointments')
+                ->set('client_uuid', $qb->expr()->literal($post['client_uuid']))
+                ->set('product_uuid', $qb->expr()->literal($post['product_uuid']))
+                ->set('client_name', $qb->expr()->literal($post['client_name']))
+                ->set('product_name', $qb->expr()->literal($post['product_name']))
+                ->set('product_duration', $post['product_duration'])
+                ->set('date', $qb->expr()->literal($post['date']))
                 ->where('uuid = :uuid')
-                ->setParameter('uuid', $post->uuid);
+                ->setParameter('uuid', $post['uuid']);
         try {$result = $query->execute();}catch(\Exception $e) {
-            return $e->getCode();
+            return $e->getMessage();
         }
-        return ['uuid'=>$post->uuid];
+        return ['uuid'=>$post['uuid']];
+    }
+
+    function delete($postUuid){
+        try {
+                $result = $this->db->executeQuery('DELETE FROM appointments
+                    WHERE uuid = ?',
+                    [$postUuid]
+                );
+        } catch(\Exception $e) {
+            return trigger_error($e->getMessage(), E_USER_ERROR);
+        }
+        return ['uuid'=>$postUuid];
     }
 }

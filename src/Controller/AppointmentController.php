@@ -60,6 +60,25 @@ class AppointmentController {
             return $app->json($response = $appRepo->insert($newPost));
         });
 
+        $appointment->post('/manage/{appointmentUuid}', function($appointmentUuid) use($app){
+            $appRepo = new AppointmentRepo($app['db']);
+            $clientRepo = new ClientRepo($app['db']);
+            $productRepo = new ProductRepo($app['db']);
+            $client = $clientRepo->getByUuid($_POST['client_uuid']);
+            $product = $productRepo->getByUuid($_POST['product_uuid']);
+            $_POST['uuid'] = $appointmentUuid;
+            $_POST['client_name'] = $client->first_name.' '.$client->last_name;
+            $_POST['product_name'] = $product->name;
+            $_POST['product_duration'] = $product->duration;
+            $_POST['date'] = date('Y-m-d H:i:s', strtotime($_POST['date'].' '.$_POST['time']));
+            return $app->json($appRepo->update($_POST));
+        });
+
+        $appointment->post('/delete', function() use($app){
+            $appRepo = new AppointmentRepo($app['db']);
+            return $app->json($appRepo->delete($_POST['uuid']));
+        });
+
         return $appointment;
     }
 }

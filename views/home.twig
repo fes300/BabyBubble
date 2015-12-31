@@ -107,6 +107,7 @@ $("#newAppointmentForm").on('submit',(function(e) {
             alert('congratulations, you scheduled a new appointment :)');
             $('#newAppointment').hide('slow');
             $('#overlay').hide('slow');
+            location.reload();
         }
     });
 }));

@@ -19,27 +19,30 @@ input.success {
     <form role="form" method="post" action="">
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-            <select id="client" class="form-control" name="client_name" required>
+            <select id="client_uuid" class="form-control" required>
                 {% include "helpers/clients.twig" %}
             </select>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-            <select id="product" class="form-control" name="product_name" required>
+            <select id="product_uuid" class="form-control" required>
                 {% include "helpers/products.twig" %}
             </select>
         </div>
         </br>
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
-            <input class="form-control starting_date" name='date' value="{{ appointment.date|date('m/d/Y') }}" required>
+            <input class="form-control starting_date" id='date' value="{{ appointment.date|date('m/d/Y') }}" required>
         </div>
         </br>
-        <span id="confirmMessage1" class="confirmMessage"></span>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
+            <input class="form-control timepicker" id='time' value="{{ appointment.date|date('H:i') }}" required>
+        </div>
         </br>
     </form>
-    <div id="newUserInfo"></div>
+    <div id="newAppointmentInfo"></div>
     <button id="send1" class="btn btn-success">Modifica l'appuntamento</button>
     <button id="send2" class="btn btn-danger">Elimina l'appuntamento</button>
 </div>
@@ -80,11 +83,14 @@ input.success {
         <textarea rows="8" cols="25" id='first_contact_info' class="form-control pickadate" name='first_contact_info' disabled>{{ appointment.first_contact_info }}</textarea>
     </div>
     </br>
+    <div class="top30 col-lg-12 col-md-12 col-sm-12">
+        <a href="/clients/manage/{{appointment.clientUuid}}"><button class="btn btn-success">Modifica le informazioni</button></a>
+    </div>
 </div>
 
 
 <script>
-    $('.starting_date').val("{{ appointment.birthday|date('m/d/Y') }}");
+    $('.starting_date').val("{{ appointment.date|date('m/d/Y') }}");
     $('.starting_date').click(function(){
         $('.starting_date').pickadate({
             labelMonthNext: 'Go to the next month',
@@ -96,38 +102,60 @@ input.success {
             format: 'yyyy-mm-dd'
         });
     });
+
+    $('.timepicker').pickatime({ format: 'H:i', interval: 5, min: [7,30], max: [18,0] });
+
     $('#send1').click(function() {
         if($(this).hasClass('disabled')) return false;
-        var clientData = {};
-        $.each($('#addANewUser input'),function(){
-            var fieldName = $(this).attr('name');
-            var fieldValue = $(this).val();
-            clientData[fieldName] = fieldValue;
-        });
-        clientData['first_contact_info'] = $('#first_contact_info').val();
-        clientData['medical_conditions'] = $('#medical_conditions').val();
+        confirm('Sei sicuro di voler modificare l\'appuntamento?');
+        var client_uuid = $('#client_uuid').val();
+           product_uuid = $('#product_uuid').val();
+                   date = $('#date').val();
+                   time = $('#time').val();
+        var appointmentData = {
+            'client_uuid': client_uuid,
+            'product_uuid': product_uuid,
+            'date': date,
+            'time': time
+        };
+        console.log(appointmentData);
 
        $.ajax({
           type: "POST",
-          url: '/clients/manage/'+'{{ appointment.uuid }}',
-          data: clientData,
+          url: '/appointments/manage/'+'{{ appointment.appointmentUuid }}',
+          data: appointmentData,
           error: function(e) {
               console.log(e);
              $('#newUserInfo').html('<p>An error has occurred, please try again later.</p>');
           },
           success: function(data) {
               console.log(data);
-              var text = '';
-              var response = data;
-              if(response == 0){
-                  text = 'I dati corrispondono a un altrobambino già presente nel database!.';
-                  var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
-              }else{
-                  text = 'Congratulazioni, hai correttamente modificato le informazioni :)';
-                  var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
-              }
+              text = 'Congratulazioni, hai correttamente modificato le informazioni :)';
+              var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
               $('.lastInfo').remove();
-              $('#newUserInfo').append(description);
+              $('#newAppointmentInfo').append(description);
+          }
+       });
+    });
+
+    $('#send2').click(function() {
+        if($(this).hasClass('disabled')) return false;
+        confirm('Sei sicuro di voler cancellare l\'appuntamento? Una volta cancellato non sarà più possibile recuperarlo.');
+        var uuid = {
+            'uuid': '{{ appointment.appointmentUuid }}'
+        };
+       $.ajax({
+          type: "POST",
+          url: '/appointments/delete',
+          data: uuid,
+          error: function(e) {
+              console.log(e);
+             $('#newUserInfo').html('<p>An error has occurred, please try again later.</p>');
+          },
+          success: function(data) {
+              console.log(data);
+              alert('L\'appuntamento è stato cancellatocon successo!');
+              window.location.replace("/");
           }
        });
     });
