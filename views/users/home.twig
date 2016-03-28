@@ -124,6 +124,9 @@ input.success {
 
 <script>
     $("#users").dataTable({
+        "sScrollY": "300px",
+        "sScrollX": "100%",
+        "bScrollCollapse": true,
         "aaData":[
             {% for user in users %}
                 {% if loop.index > 1 %},{% endif %}

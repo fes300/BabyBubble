@@ -62,7 +62,7 @@
 <div id="manageClients" class="container section">
     <h3>Manage Users</h3>
     <div class="margin-bottom">
-        <table id="clients" class="display" cellspacing="0" width="100%">
+        <table id="clients" class="display" cellspacing="0">
             <thead>
                 <tr><th>Nome del bambino</th><th>Nome del tutor</th><th>Compleanno</th><th>Creato</th><th>Modificato</th><th></th>
             </thead>
@@ -73,7 +73,7 @@
 </div>
 
 <script>
-    $('.starting_date').data('value', "2005-01-01");
+    $('.starting_date').data('value', "2015-01-01");
     $('.starting_date').val("Data di nascita");
     $('.starting_date').click(function(){
         $('.starting_date').pickadate({
@@ -124,6 +124,9 @@
     });
 
     $("#clients").dataTable({
+        "sScrollY": "300px",
+        "sScrollX": "100%",
+        "bScrollCollapse": true,
         "aaData":[
             {% for client in clients %}
                 {% if loop.index > 1 %},{% endif %}

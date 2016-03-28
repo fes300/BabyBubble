@@ -7,7 +7,7 @@
     <div class="margin-bottom">
         <table id="appointments" class="display" cellspacing="0" width="100%">
             <thead>
-                <tr><th>Nome del bambino</th><th>Prodotto acquistato</th><th>Data appuntamento</th><th>Creato</th><th>Modificato</th><th></th>
+                <tr><th>Nome del bambino</th><th></th><th>Prodotto acquistato</th><th>Data appuntamento</th><th>Orario</th><th>Creato</th><th>Modificato</th>
             </thead>
             <tbody>
             </tbody>
@@ -17,15 +17,19 @@
 
 <script>
 $("#appointments").dataTable({
+    "sScrollY": "300px",
+    "sScrollX": "100%",
+    "bScrollCollapse": true,
     "aaData":[
         {% for appointment in appointments %}
             {% if loop.index > 1 %},{% endif %}
                 ["{{ appointment.client_name }}",
+                "<a href=/appointments/{{ appointment.uuid }}><div class='btn btn-success'>Guarda l'appuntamento</div></a>",
                 "{{ appointment.product_name }}",
-                "{{ appointment.date|date('m/d/Y') }}",
-                "{{ appointment.created|date('m/d/Y') }}",
-                "{{ appointment.updated|date('m/d/Y') }}",
-                "<a href=/appointments/{{ appointment.uuid }}><div class='btn btn-success'>Guarda l'appuntamento</div></a>"]
+                "{{ appointment.date|date('d/m/Y') }}",
+                "{{ appointment.date|date('h:i') }}",
+                "{{ appointment.created|date('d/m/Y') }}",
+                "{{ appointment.updated|date('d/m/Y') }}"]
         {% endfor %}
     ],
     "autoWidth": true,

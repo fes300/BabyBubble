@@ -83,7 +83,7 @@ body{
     margin-top: 40px;
     text-align: center;
     font-size: 14px;
-    background-color: rgb(217, 242, 246);
+    background-color: #5784cc;
     background-image: url('/img/logo.png');
     background-repeat: no-repeat;
     background-size:100%;
@@ -122,6 +122,8 @@ footer{
 #newAppointment{
     display: none;
     position: fixed;
+    width: 40%;
+    height: 30%;
     top: 30%;
     left: 30%;
     text-align:center;
@@ -154,4 +156,20 @@ footer{
 .navbarLogo{
     margin: 10px 20px 4px 0;
     padding: 0;
+}
+
+@media (max-width: 900px) {
+  #calendar{
+    width: 96% !important;
+    margin: 2% !important;
+  }
+
+  .fc-header-center{
+    display: none;
+  }
+
+  #newAppointment{
+    width: 90%;
+    left: 5%;
+  }
 }

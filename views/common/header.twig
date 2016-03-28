@@ -20,6 +20,7 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <li {% if page == 'products' %}class="active"{% endif %}><a href="/products">Trattamenti</a></li>
                     <li {% if page == 'users' %}class="active"{% endif %}><a href="/users">Users</a></li>
+                    <li><a href="/adminer.php">Vai su adminer!</a></li>
                 {% endif %}
               </ul>
               <ul class="nav navbar-nav navbar-right">
