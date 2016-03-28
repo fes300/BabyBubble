@@ -41,10 +41,11 @@ class AppointmentRepository extends Repository{
     }
 
     function getAll(){
-         $rows = $this->db->fetchAll('SELECT * FROM appointments');
+         $rows = $this->db->fetchAll('SELECT *, appointments.uuid AS uuid FROM appointments JOIN clients ON appointments.client_uuid = clients.uuid');
          $appointments = [];
          for($i = 0; $i < count($rows); $i++){
              $appointment = new Appointment($rows[$i]);
+             $appointment->birth = $rows[$i]['birthday'];
              array_push($appointments, $appointment);
          };
          return $appointments;

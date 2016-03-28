@@ -28,7 +28,38 @@ var events = '{{ appointments|e('js') }}';
 var formattedEvents = events.map(function(event){
     var startDate = new Date(event.date);
           endDate = new Date(startDate.getTime() + (parseFloat(event.product_duration)*60)*60000);
+          birth = new Date(Date.parse(event.birth));
+          age = (new Date(Date.now()).getFullYear() - birth.getFullYear())*12 + (new Date(Date.now()).getMonth() - birth.getMonth());
+
+    switch (age) {
+      case 0:
+      case 1:
+        color = 'rgb(146, 226, 244)';
+        break;
+      case  2:
+      case  3:
+        color = 'rgb(73, 197, 244)';
+        break;
+      case 4:
+      case 5:
+        color = 'rgb(28, 171, 226)';
+        break;
+      case 6:
+      case 7:
+        color = 'rgb(12, 130, 175)';
+      case 8:
+      case 9:
+        color = 'rgb(15, 97, 129)';
+        break;
+      default:
+        color = 'rgb(11, 67, 89)';
+    }
+
+    console.log(color);
+
     appForm = {
+        age: age,
+        backgroundColor: color,
         title: event.client_name+' '+event.product_name,
         start: startDate,
         end:endDate,

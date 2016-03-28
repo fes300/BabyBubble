@@ -31,6 +31,8 @@ class ClientController {
         $client->post('/client', function() use($app){
             $clientRepo = new ClientRepo($app['db']);
             $_POST['tutors'] = json_encode(explode(',', $_POST['tutors']));
+            empty($_POST['medical_conditions'])? $_POST['medical_conditions'] = 'nessuna' : '';
+            empty($_POST['first_contact_info'])? $_POST['first_contact_info'] = 'non fornite' : '';
             $client = new Client($_POST);
             return $app->json($clientRepo->insert($client));
         })->secure('IS_AUTHENTICATED_REMEMBERED');

@@ -29,7 +29,7 @@ class ClientRepository extends Repository{
 
         try {$result = $this->db->insert('clients', $data);} catch(\Exception $e) {
             // return $e->getMessage();
-            return $e->getCode();
+            return $e->getMessage();
         }
         return ['uuid'=>$data['uuid']];
     }
