@@ -48,16 +48,17 @@ class AppointmentController {
             $product = $productRepo->getByUuid($_POST['product']);
             $allDay = "";
             if(!empty($_POST['all_day']))$allDay = $_POST['all_day'];
-            $newPost = ['client_uuid'=>$client->uuid,
+            $newAppointment = ['client_uuid'=>$client->uuid,
                         'client_name'=>($client->first_name.' '.$client->last_name),
                         'product_uuid'=>$product->uuid,
                         'product_name'=>$product->name,
                         'product_duration'=>$product->duration,
+                        'notes'=>$_POST['notes'],
                         'date'=>date('Y-m-d H:i:s', strtotime($_POST['date'].' '.$_POST['time'])),
                         'all_day'=>$allDay
                     ];
-            $newPost = new Appointment($newPost);
-            return $app->json($response = $appRepo->insert($newPost));
+            $newAppointment = new Appointment($newAppointment);
+            return $app->json($response = $appRepo->insert($newAppointment));
         });
 
         $appointment->post('/manage/{appointmentUuid}', function($appointmentUuid) use($app){

@@ -11,6 +11,7 @@ class AppointmentModel {
         $this->product_name = empty($data['product_name']) ? null : $data['product_name'];
         $this->product_duration = empty($data['product_duration']) ? null : $data['product_duration'];
         $this->date = empty($data['date']) ? null : $data['date'];
+        $this->notes = empty($data['notes']) ? null : $data['notes'];
         $this->all_day = empty($data['all_day']) ? null : $data['all_day'];
         $this->created = empty($data['created']) ? null : $data['created'];
         $this->updated = empty($data['updated']) ? null : $data['updated'];

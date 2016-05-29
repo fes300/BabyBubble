@@ -19,6 +19,7 @@ class AppointmentRepository extends Repository{
             'product_uuid' => $appointment->product_uuid,
             'product_name' => $appointment->product_name,
             'product_duration' => $appointment->product_duration,
+            'notes' => $appointment->notes,
             'date' => $appointment->date,
             'all_day' => $appointment->all_day,
             'created' => $now->format('c'),
@@ -73,6 +74,7 @@ class AppointmentRepository extends Repository{
                 ->set('product_name', $qb->expr()->literal($post['product_name']))
                 ->set('product_duration', $post['product_duration'])
                 ->set('date', $qb->expr()->literal($post['date']))
+                ->set('notes', $qb->expr()->literal($post['notes']))
                 ->where('uuid = :uuid')
                 ->setParameter('uuid', $post['uuid']);
         try {$result = $query->execute();}catch(\Exception $e) {

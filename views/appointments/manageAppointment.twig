@@ -41,6 +41,11 @@ input.success {
             <input class="form-control timepicker" id='time' value="{{ appointment.date|date('H:i') }}" required>
         </div>
         </br>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <h6>note particolari sull'appuntamento</h6>
+            <textarea rows="8" cols="25" id='notes' class="form-control" name='notes'>{{ appointment.notes }}</textarea>
+        </div>
+        </br>
     </form>
     <div id="newAppointmentInfo"></div>
     <button id="send1" class="btn btn-success">Modifica l'appuntamento</button>
@@ -76,11 +81,11 @@ input.success {
     </br>
     <div class="col-lg-6 col-md-6 col-sm-12">
         <h6>condizioni mediche particolari</h6>
-        <textarea rows="8" cols="25" id='medical_conditions' class="form-control pickadate" name='medical_conditions' disabled>{{ appointment.medical_conditions }}</textarea>
+        <textarea rows="8" cols="25" id='medical_conditions' class="form-control" name='medical_conditions' disabled>{{ appointment.medical_conditions }}</textarea>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12">
         <h6>come ci ha conosciuto?</h6>
-        <textarea rows="8" cols="25" id='first_contact_info' class="form-control pickadate" name='first_contact_info' disabled>{{ appointment.first_contact_info }}</textarea>
+        <textarea rows="8" cols="25" id='first_contact_info' class="form-control" name='first_contact_info' disabled>{{ appointment.first_contact_info }}</textarea>
     </div>
     </br>
     <div class="top30 col-lg-12 col-md-12 col-sm-12">
@@ -112,13 +117,14 @@ input.success {
            product_uuid = $('#product_uuid').val();
                    date = $('#date').val();
                    time = $('#time').val();
+                  notes = $('#notes').val();
         var appointmentData = {
             'client_uuid': client_uuid,
             'product_uuid': product_uuid,
             'date': date,
-            'time': time
+            'time': time,
+            'notes': notes
         };
-        console.log(appointmentData);
 
        $.ajax({
           type: "POST",
