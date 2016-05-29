@@ -55,8 +55,6 @@ var formattedEvents = events.map(function(event){
         color = 'rgb(11, 67, 89)';
     }
 
-    console.log(color);
-
     appForm = {
         age: age,
         backgroundColor: color,
@@ -69,21 +67,12 @@ var formattedEvents = events.map(function(event){
     return appForm;
 });
 
-console.log(formattedEvents);
-
 $(document).ready(function()
 {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
-
-    /*
-        Initialize fullCalendar and store into variable.
-        Why in variable?
-        Because doing so we can use it inside other function.
-        In order to modify its option later.
-    */
 
     var calendar = $('#calendar').fullCalendar(
     {
@@ -127,12 +116,12 @@ $("#newAppointmentForm").on('submit',(function(e) {
     console.log(new FormData(this));
     e.preventDefault();
     $.ajax({
-        url: "/appointments/appointment", // Url to which the request is send
-        type: "POST",             // Type of request to be send, called as method
-        data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
-        contentType: false,       // The content type used when sending data to the server.
-        cache: false,             // To unable request pages to be cached
-        processData:false,        // To send DOMDocument or non processed data file it is set to false
+        url: "/appointments/appointment",
+        type: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false,
+        processData:false, // To send DOMDocument or non processed data file it is set to false
         success: function(data)
         {
             console.log(data);
