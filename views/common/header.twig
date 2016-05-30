@@ -15,7 +15,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
                 <li {% if page == 'appointments' %}class="active"{% endif %}><a href="/appointments">Appuntamenti</a></li>
-                <li {% if page == 'clients' %}class="active"{% endif %}><a href="/clients">Bambini</a></li>
+                <li {% if page == 'clients' %}class="active"{% endif %}><a href="/clients"><strong>Nuovo Bambino!</strong></a></li>
                 <li {% if page == 'promotions' %}class="active"{% endif %}><a href="/promotions">Promozioni</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
                     <li {% if page == 'products' %}class="active"{% endif %}><a href="/products">Trattamenti</a></li>

@@ -77,6 +77,10 @@ $(document).ready(function()
 
     var calendar = $('#calendar').fullCalendar(
     {
+        monthNames: ['gennaio','febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'],
+        monthNamesShort: ['gen','feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'],
+        dayNames: ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'],
+        dayNamesShort: ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'],
         weekends: true,
         hiddenDays: [0],
         editable: false,
