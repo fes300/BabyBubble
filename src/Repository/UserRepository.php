@@ -38,6 +38,16 @@ class UserRepository extends Repository{
         return new User($rows[0]);
     }
 
+    function delete($uuid) {
+        try {$this->db->fetchAll(
+            'DELETE FROM users WHERE uuid = ?',
+            [$uuid]);
+        } catch (\Exception $e) {
+            return $e->getCode();
+        }
+        return true;
+    }
+
     function getAll(){
          $rows = $this->db->fetchAll('SELECT * FROM users');
          $users = [];

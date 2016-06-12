@@ -51,7 +51,8 @@ input.success {
         </br>
     </form>
     <div id="newUserInfo"></div>
-    <button id="send1" class="btn btn-success">Submit</button>
+    <button id="send1" class="btn btn-success">Aggiorna informazioni</button>
+    <button id="send2" class="btn btn-danger">Elimina utente</button>
 </div>
 
 <script>
@@ -97,16 +98,40 @@ input.success {
               var text = '';
               var response = data;
               if(response == 0){
-                  text = 'Sorry but the username is already taken.';
+                  text = 'Mi spiace malo username è già utilizzato, scegliene un altro.';
                   var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
               }else{
-                  text = 'Congratulations, you successfully modified the user '+data+'.';
+                  text = 'Congratulazioni hai modificato con successo l\'utente '+data+'.';
                   var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
               }
               $('.lastInfo').remove();
               $('#newUserInfo').append(description);
           }
        });
+    });
+
+    $('#send2').click(function() {
+        var cancel = confirm('sei sicuro di voler cancellare l\'utente?');
+        if (cancel) {
+          $.ajax({
+             type: "POST",
+             url: '/users/delete/'+'{{ user.uuid }}',
+             data: {},
+             error: function(e) {
+                 console.log(e);
+                $('#newUserInfo').html('<p>An server error has occurred, no worries but please try again later.</p>');
+             },
+             success: function(data) {
+                 console.log(data);
+                 if (data === true) {
+                    alert('L\'utente è stato cancellato.');
+                    location.replace('/users');
+                 } else {
+                   alert('something went wrong...');
+                 }
+             }
+          });
+        }
     });
 </script>
 

@@ -35,6 +35,7 @@ class UserController {
             return $app->render('users/manageUser.twig', ['user'=>$user, 'page'=>'users']);
         })->secure('ROLE_ADMIN');
 
+
         $admin->post('/manage/{userUuid}', function($userUuid) use($app){
             $userRepo = new UserRepo($app['db']);
             $user = $userRepo->getbyUuid($userUuid);
@@ -45,9 +46,14 @@ class UserController {
                 $encoder = $app['security.encoder_factory']->getEncoder($simphonyUser);
                 $encodedPassword = $encoder->encodePassword($_POST['password'], $simphonyUser->getSalt());
                 $_POST['password'] = $encodedPassword;
-            }else{$_POST['password'] = $user->password;};
+            } else {$_POST['password'] = $user->password;};
 
             return $app->json($userRepo->update($_POST));
+        })->secure('ROLE_ADMIN');
+
+        $admin->post('/delete/{userUuid}', function($userUuid) use($app){
+            $userRepo = new UserRepo($app['db']);
+            return $app->json($userRepo->delete($userUuid));
         })->secure('ROLE_ADMIN');
 
         $admin->post('/user', function() use($app){

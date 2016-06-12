@@ -17,7 +17,7 @@ class Products extends AbstractMigration
         $users = $this->table('products', array('id' => false, 'primary_key' => array('uuid')));
         $users->addColumn('uuid', 'uuid')
             ->addColumn('name', 'string', array('limit'=>255))
-            ->addColumn('description', 'string', array('limit'=>500))
+            ->addColumn('description', 'string', array('null'=>true))
             ->addColumn('duration', 'float')
             ->addColumn('active', 'boolean')
             ->addColumn('created', 'timestamp')
