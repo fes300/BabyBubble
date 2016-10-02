@@ -17,5 +17,6 @@ class ClientModel {
         $this->first_contact_info = empty($data['first_contact_info']) ? null : $data['first_contact_info'];
         $this->created = empty($data['created']) ? null : $data['created'];
         $this->updated = empty($data['updated']) ? null : $data['updated'];
+        $this->active = empty($data['active']) === null ? true : $data['active'];
     }
 }

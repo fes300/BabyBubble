@@ -23,6 +23,7 @@ class ClientRepository extends Repository{
             'birthday' => $client->birthday,
             'medical_conditions' => $client->medical_conditions,
             'first_contact_info' => $client->first_contact_info,
+            'active' => true,
             'created' => $now->format('c'),
             'updated' => $now->format('c'),
         ];
@@ -43,13 +44,15 @@ class ClientRepository extends Repository{
     }
 
     function getAll(){
-         $rows = $this->db->fetchAll('SELECT * FROM clients');
-         $clients = [];
-         for($i = 0; $i < count($rows); $i++){
-             $client = new Client($rows[$i]);
-             array_push($clients, $client);
-         };
-         return $clients;
+      $rows = $this->db->fetchAll('SELECT * FROM clients WHERE active = ?',
+        ['true']
+      );
+      $clients = [];
+      for($i = 0; $i < count($rows); $i++){
+        $client = new Client($rows[$i]);
+        array_push($clients, $client);
+      };
+      return $clients;
     }
 
     function getByLastName($lastName) {
@@ -78,5 +81,19 @@ class ClientRepository extends Repository{
             return $e->getCode();
         }
         return ['uuid'=>$post->uuid];
+    }
+
+    function delete($postUuid){
+      $qb = $this->db->createQueryBuilder();
+      $query = $qb->update('clients')
+        ->set('active', 'false')
+        ->where('uuid = :uuid')
+        ->setParameter('uuid', $postUuid);
+      try {
+        $result = $query->execute();
+      } catch (\Exception $e) {
+        return $e->getCode();
+      }
+      return ['uuid'=>$postUuid];
     }
 }

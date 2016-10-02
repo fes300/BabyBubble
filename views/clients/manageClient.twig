@@ -66,7 +66,8 @@ input.success {
         </br>
     </form>
     <div id="newUserInfo"></div>
-    <button id="send1" class="btn btn-success">Submit</button>
+    <button id="send1" class="btn btn-success">Modifica</button>
+    <button id="send2" class="btn btn-danger">Elimina</button>
 </div>
 
 <script>
@@ -114,6 +115,27 @@ input.success {
               }
               $('.lastInfo').remove();
               $('#newUserInfo').append(description);
+          }
+       });
+    });
+
+    $('#send2').click(function() {
+        if($(this).hasClass('disabled')) return false;
+        var uuid = {
+            'uuid': '{{ client.uuid }}'
+        };
+       $.ajax({
+          type: "POST",
+          url: '/clients/delete',
+          data: uuid,
+          error: function(e) {
+              console.log(e);
+             $('#newUserInfo').html('<p>An error has occurred, please try again later.</p>');
+          },
+          success: function(data) {
+              console.log(data);
+              alert('Il bambino è stato cancellato con successo! :)');
+              // window.location.replace("/clients/");
           }
        });
     });

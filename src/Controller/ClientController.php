@@ -52,6 +52,11 @@ class ClientController {
             return $app->json($clientRepo->update($client));
         })->secure('IS_AUTHENTICATED_REMEMBERED');
 
+        $client->post('/delete', function() use($app){
+          $clientRepo = new ClientRepo($app['db']);
+          return $app->json($clientRepo->delete($_POST['uuid']));
+        })->secure('IS_AUTHENTICATED_REMEMBERED');
+
         return $client;
     }
 }
