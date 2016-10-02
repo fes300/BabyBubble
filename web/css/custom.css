@@ -122,7 +122,6 @@ footer{
 #newAppointment{
     display: none;
     position: fixed;
-    width: 40%;
     height: 30%;
     top: 30%;
     left: 30%;

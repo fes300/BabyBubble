@@ -36,7 +36,7 @@ class AppointmentController {
             $clients = $clientRepo->getAll();
             $products = $productRepo->getAll();
             $extendedAppointment = json_decode($appointmentRepo->getAppointmentWithClientInfo($appointmentUuid));
-            $extendedAppointment->tutors = implode(",",json_decode($extendedAppointment->tutors));
+            if ($extendedAppointment->tutors) $extendedAppointment->tutors = implode(",",json_decode($extendedAppointment->tutors));
             return $app['twig']->render('appointments/manageAppointment.twig', ['appointment'=>$extendedAppointment, 'clients'=>$clients, 'products'=>$products, 'page'=>'appointments']);
         });
 
@@ -44,12 +44,16 @@ class AppointmentController {
             $appRepo = new AppointmentRepo($app['db']);
             $clientRepo = new ClientRepo($app['db']);
             $productRepo = new ProductRepo($app['db']);
-            $client = $clientRepo->getByUuid($_POST['client']);
+            if ($_POST['client']) {
+              $client = $clientRepo->getByUuid($_POST['client']);
+            }
             $product = $productRepo->getByUuid($_POST['product']);
             $allDay = "";
+            $name = $_POST['client'] ? null : $_POST['name'];
             if(!empty($_POST['all_day']))$allDay = $_POST['all_day'];
-            $newAppointment = ['client_uuid'=>$client->uuid,
-                        'client_name'=>($client->first_name.' '.$client->last_name),
+            $newAppointment = [
+                        'client_uuid'=>$_POST['client'] ? $client->uuid : null,
+                        'client_name'=>$_POST['client'] ? $client->first_name.' '.$client->last_name :$name,
                         'product_uuid'=>$product->uuid,
                         'product_name'=>$product->name,
                         'product_duration'=>$product->duration,
@@ -65,10 +69,12 @@ class AppointmentController {
             $appRepo = new AppointmentRepo($app['db']);
             $clientRepo = new ClientRepo($app['db']);
             $productRepo = new ProductRepo($app['db']);
-            $client = $clientRepo->getByUuid($_POST['client_uuid']);
+            if ($_POST['client_uuid']) {
+              $client = $clientRepo->getByUuid($_POST['client_uuid']);
+              $_POST['client_name'] = $client->first_name.' '.$client->last_name;
+            }
             $product = $productRepo->getByUuid($_POST['product_uuid']);
             $_POST['uuid'] = $appointmentUuid;
-            $_POST['client_name'] = $client->first_name.' '.$client->last_name;
             $_POST['product_name'] = $product->name;
             $_POST['product_duration'] = $product->duration;
             $_POST['date'] = date('Y-m-d H:i:s', strtotime($_POST['date'].' '.$_POST['time']));

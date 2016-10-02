@@ -12,6 +12,7 @@
             {% include "helpers/products.twig" %}
         </select>
         <input id="event" class="form-control" name="event" placeholder="Nome evento" style="display: none;">
+        <input id="name" class="form-control" name="name" placeholder="Nome bambino">
     </br></br>
         <input name="date" type="text" class="form-control starting_date" placeholder="Data appuntamento">
         <input name="time" type="text" class="form-control timepicker" placeholder="Orario appuntamento">
@@ -25,7 +26,6 @@
 <script type="text/javascript">
 var events = '{{ appointments|e('js') }}';
     events = eval(events);
-
 var formattedEvents = events.map(function(event){
     var startDate = new Date(event.date);
           endDate = new Date(startDate.getTime() + (parseFloat(event.product_duration)*60)*60000);
@@ -74,13 +74,12 @@ $(document).ready(function()
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
-
     var calendar = $('#calendar').fullCalendar(
     {
         monthNames: ['gennaio','febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'],
         monthNamesShort: ['gen','feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'],
-        dayNames: ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'],
-        dayNamesShort: ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'],
+        dayNames: ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'],
+        dayNamesShort: ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'],
         axisFormat: 'HH:mm',
         columnFormat: {
             month: 'ddd',

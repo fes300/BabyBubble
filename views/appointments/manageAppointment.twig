@@ -17,6 +17,13 @@ input.success {
     <h6>creato: {{ appointment.created|date('m/d/Y') }}</h6>
     <h6>ultima modifica: {{ appointment.updated|date('m/d/Y H:m') }}</h6>
     <form role="form" method="post" action="">
+        {% if  appointment.birthday is not defined or appointment.birthday is null %}
+          <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-user">  Nome provvisorio: </span></span>
+              <input class="form-control" id='client_name' name='client_name' value="{{ appointment.client_name }}">
+          </div>
+          </br>
+        {% endif %}
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
             <select id="client_uuid" class="form-control" required>
@@ -52,46 +59,48 @@ input.success {
     <button id="send2" class="btn btn-danger">Elimina l'appuntamento</button>
 </div>
 
-<div class="container sheet sub-sheet">
-    <h3>Info sul bambino</h3>
-    <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-heart-empty"></span></span>
-        <input type="text" class="form-control" name="tutors" value="{{ appointment.tutors }}" disabled>
-    </div>
-    </br>
-    <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
-        <input class="form-control" name='address' value="{{ appointment.address }}" disabled>
-    </div>
-    </br>
-    <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-earphone"></span></span>
-        <input class="form-control" name='phone' value="{{ appointment.phone }}" disabled>
-    </div>
-    </br>
-    <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-        <input class="form-control" name='email' type="email" value="{{ appointment.email }}" disabled>
-    </div>
-    </br>
-    <div class="input-group">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
-        <input class="form-control" name='birthday' value="{{ appointment.birthday|date('m/d/Y') }}" disabled>
-    </div>
-    </br>
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <h6>condizioni mediche particolari</h6>
-        <textarea rows="8" cols="25" id='medical_conditions' class="form-control" name='medical_conditions' disabled>{{ appointment.medical_conditions }}</textarea>
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <h6>come ci ha conosciuto?</h6>
-        <textarea rows="8" cols="25" id='first_contact_info' class="form-control" name='first_contact_info' disabled>{{ appointment.first_contact_info }}</textarea>
-    </div>
-    </br>
-    <div class="top30 col-lg-12 col-md-12 col-sm-12">
-        <a href="/clients/manage/{{appointment.clientUuid}}"><button class="btn btn-success">Modifica le informazioni</button></a>
-    </div>
-</div>
+{% if  appointment.birthday %}
+  <div class="container sheet sub-sheet">
+      <h3>Info sul bambino</h3>
+      <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-heart-empty"></span></span>
+          <input type="text" class="form-control" name="tutors" value="{{ appointment.tutors }}" disabled>
+      </div>
+      </br>
+      <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
+          <input class="form-control" name='address' value="{{ appointment.address }}" disabled>
+      </div>
+      </br>
+      <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-earphone"></span></span>
+          <input class="form-control" name='phone' value="{{ appointment.phone }}" disabled>
+      </div>
+      </br>
+      <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+          <input class="form-control" name='email' type="email" value="{{ appointment.email }}" disabled>
+      </div>
+      </br>
+      <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-baby-formula"></span></span>
+          <input class="form-control" name='birthday' value="{{ appointment.birthday|date('m/d/Y') }}" disabled>
+      </div>
+      </br>
+      <div class="col-lg-6 col-md-6 col-sm-12">
+          <h6>condizioni mediche particolari</h6>
+          <textarea rows="8" cols="25" id='medical_conditions' class="form-control" name='medical_conditions' disabled>{{ appointment.medical_conditions }}</textarea>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12">
+          <h6>come ci ha conosciuto?</h6>
+          <textarea rows="8" cols="25" id='first_contact_info' class="form-control" name='first_contact_info' disabled>{{ appointment.first_contact_info }}</textarea>
+      </div>
+      </br>
+      <div class="top30 col-lg-12 col-md-12 col-sm-12">
+          <a href="/clients/manage/{{appointment.clientUuid}}"><button class="btn btn-success">Modifica le informazioni</button></a>
+      </div>
+  </div>
+{% endif %}
 
 
 <script>
@@ -118,12 +127,14 @@ input.success {
                    date = $('#date').val();
                    time = $('#time').val();
                   notes = $('#notes').val();
+            client_name = $('#client_name').val();
         var appointmentData = {
             'client_uuid': client_uuid,
             'product_uuid': product_uuid,
             'date': date,
             'time': time,
-            'notes': notes
+            'notes': notes,
+            'client_name': client_name,
         };
 
        $.ajax({
@@ -140,6 +151,9 @@ input.success {
               var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
               $('.lastInfo').remove();
               $('#newAppointmentInfo').append(description);
+              window.setTimeout(function(event){
+                location.reload();
+              }, 2000)
           }
        });
     });

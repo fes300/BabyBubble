@@ -16,7 +16,7 @@ class Appointments extends AbstractMigration
     {
         $users = $this->table('appointments', array('id' => false, 'primary_key' => array('uuid')));
         $users->addColumn('uuid', 'uuid')
-            ->addColumn('client_uuid', 'uuid')
+            ->addColumn('client_uuid', 'uuid', array('null'=>true))
             ->addColumn('client_name', 'string', array('limit'=>255))
             ->addColumn('product_uuid', 'uuid')
             ->addColumn('product_name', 'string', array('limit'=>255))
